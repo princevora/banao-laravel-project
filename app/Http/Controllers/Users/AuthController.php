@@ -28,7 +28,7 @@ class AuthController extends Controller
                 'password' => 'required|min:8',
             ],
             [
-                'email.exists' => 'Please provide valid email address, we couldnt found email'
+                'email.exists' => 'Please provide valid email address, we couldnt found this email'
             ]
         );
 
