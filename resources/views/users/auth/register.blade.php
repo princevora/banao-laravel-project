@@ -1,4 +1,4 @@
-@extends('users.layouts.main')
+@extends('users.auth.layouts.main')
 @section('title', "Register")
 @section('content')
     <section class="bg-gray-50 h-screen dark:bg-gray-900">

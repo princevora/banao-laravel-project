@@ -39,7 +39,7 @@
                     @if (Route::has('login'))
                         <nav class="-mx-3 flex flex-1 justify-end">
                             @auth
-                                <a href="{{ url('/dashboard') }}"
+                                <a href="{{ route('dashboard') }}"
                                     class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white">
                                     Dashboard
                                 </a>
@@ -67,7 +67,7 @@
                     <p class="mb-6 text-lg font-normal text-gray-300 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">
                         Please Click on the Button below to continue to checkout the Project - tasks.
                     </p>
-                    <a href="#"
+                    <a href="{{ route('register') }}"
                         class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-gray-900 rounded-lg transition-all duration-500">
                         View Project
                         <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true"
