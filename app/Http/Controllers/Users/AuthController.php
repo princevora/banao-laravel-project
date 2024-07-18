@@ -26,6 +26,9 @@ class AuthController extends Controller
             [
                 'email'    => 'required|email|exists:users,email',
                 'password' => 'required|min:8',
+            ],
+            [
+                'email.exists' => 'Please provide valid email address, we couldnt found email'
             ]
         );
 
