@@ -110,7 +110,7 @@ class TaskController extends Controller
 
         // Check if the user's task is already same as the provided status to prevent load on database.
         if($task->status == $status){
-            return $this->sendResponse(1, "Updation aborted because the task status is already {$status}");
+            return $this->sendResponse(1, "Updating aborted because, the task status is already {$status}");
         }
 
         // Update the task status..
