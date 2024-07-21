@@ -81,7 +81,7 @@ class TaskController extends Controller
         ]);
 
         // Check if the validator fails, If fails then return message bag
-        if ($validator->fails()) return $validator->getMessageBag();
+        if ($validator->fails()) return $this->sendResponse(0, $validator->getMessageBag(), 400);
 
         /**
          * @var int $task_id
@@ -131,11 +131,11 @@ class TaskController extends Controller
 
     /**
      * @param int $successStatus
-     * @param string $message
+     * @param string | array $message
      * @param int $statusCode
      * @return \Illuminate\Http\JsonResponse
      */
-    private function sendResponse(int $successStatus, string $message, ?int $statusCode = 200)
+    private function sendResponse(int $successStatus, string | array $message, ?int $statusCode = 200)
     {
         return response()
                 ->json([
