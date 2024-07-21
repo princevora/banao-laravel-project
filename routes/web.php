@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Users\Api\TaskController;
 use App\Http\Controllers\Users\AuthController;
+use App\Http\Middleware\ApiAuthentication;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,7 +19,14 @@ Route::prefix('auth')->middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->name('login.submit');
 });
 
-Route::prefix('u')->middleware('auth')->group(function(){
-    Route::view('dashboard', 'users.dashboard.index')->name('dashboard'); 
+// Routes For User Dashboard
+Route::prefix('u')->middleware('auth')->group(function () {
+    Route::view('dashboard', 'users.dashboard.index')->name('dashboard');
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+// Routes For ToDO API
+Route::prefix('api')->middleware(ApiAuthentication::class)->group(function () {
+    Route::post('/todo/add', [TaskController::class, 'addTask'])->name('todo.add');
+    Route::post('/todo/status', [TaskController::class, 'updateStatus'])->name('todo.update.status');
 });

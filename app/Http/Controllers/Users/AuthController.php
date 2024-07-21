@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\WithToastr;
+use App\Traits\WithToastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -21,6 +22,7 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        // Validate the data
         Validator::validate(
             $request->all(),
             [
@@ -37,6 +39,7 @@ class AuthController extends Controller
             ->where('email', $request->email)
             ->firstOrFail();
 
+        // Create credentials array for Auth attempt
         $credentials = [
             'email'    => $request->email,
             'password' => $request->password
@@ -45,7 +48,11 @@ class AuthController extends Controller
         // Check if the password is incorrect or not
         if (!Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages(['password' => 'Incorrect Password Provided']);
-        } elseif (Auth::attempt($credentials, $request->remember)) {
+        } 
+        // Else check if the Auth atteampt succeed
+        elseif (Auth::attempt($credentials, $request->remember)) {
+
+            // Redirect the user to the dashboad.
             return redirect()->route('dashboard')->with('toastr', [
                 'message' => 'Successfully logged in',
                 'type'    => 'success'
@@ -59,6 +66,7 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+        // Validate data for registration
         Validator::validate(
             $request->all(),
             [
@@ -80,13 +88,17 @@ class AuthController extends Controller
 
         // Make the hashed password from the raw password
         $hashedPassword = Hash::make($password);
+        $api_token      = Str::random(50);
 
         try {
             // Try to save the user in the database
             User::query()->create([
-                'name'     => $name,
-                'email'    => $email,
-                'password' => $hashedPassword
+                'name'      => $name,
+                'email'     => $email,
+                'password'  => $hashedPassword,
+
+                // Assign user a api key, for using api
+                'api_token' => $api_token
             ])->saveOrFail();
 
             // Create credentials
@@ -95,6 +107,7 @@ class AuthController extends Controller
                 'password' => $password
             ];
 
+            // Authentiaction attempt.
             if (Auth::attempt($credentials, true)) {
                 return redirect()->route('user.dashboard');
             }
