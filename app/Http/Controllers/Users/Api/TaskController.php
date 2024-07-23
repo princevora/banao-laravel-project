@@ -96,8 +96,7 @@ class TaskController extends Controller
         // Get the user's api token using relations and prevent errors.
         $task = @Task::query()
                     ->with('user')
-                    ->where('id', $task_id)
-                    ->first();
+                    ->find($task_id);
 
         $userApiKey = $task
                     ->user
@@ -115,33 +114,45 @@ class TaskController extends Controller
 
         // Update the task status..
         try {
-            Task::where('id', $task_id)
-                ->update([
+            $task->update([
                     'status' => $status
                 ]);
 
+            // Hide the user
+            $task->makeHidden('user');
+
             // Send success response
-            return $this->sendResponse(1, "Marked task as {$status}", 200);
+            return $this->sendResponse(successStatus: 1, message: "Marked task as {$status}", task: $task);
+
         } catch (\Throwable $th) {
 
             // Send the error Response.
-            $this->sendResponse(0, 'Unable to update the task. Try again later', 422);
+            return $this->sendResponse(0, 'Unable to update the task. Try again later', 422);
         }
     }
 
     /**
-     * @param int $successStatus
+     * @param ?int $successStatus
      * @param string $message
-     * @param int $statusCode
+     * @param ?int $statusCode
      * @return \Illuminate\Http\JsonResponse
      */
-    private function sendResponse(int $successStatus, string $message, ?int $statusCode = 200)
+    private function sendResponse(int $successStatus = 1, string $message, int $statusCode = 200, Task $task = null)
     {
+        $response = [];
+
+        // Check if the task is null if not, so put the task at the first key
+        if ($task !== null) {
+            $response['task'] = $task;
+        }
+
+        // Add the status and message keys
+        $response['status'] = $successStatus;
+        $response['message'] = $message;
+
+        // Send the response
         return response()
-                ->json([
-                    'status' => $successStatus,
-                    'message' => $message
-                ])
+                ->json($response)
                 ->setStatusCode($statusCode);
     }
 }
