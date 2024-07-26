@@ -12,6 +12,8 @@
     <!-- Custom Styles if required -->
     @yield('styles')
 
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <!-- Flowbite Tailwind Css -->
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.css" rel="stylesheet" />
 
@@ -21,8 +23,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<body class="dark">
-
+<body class="dark bg-gray-900">
     <button data-drawer-target="cta-button-sidebar" data-drawer-toggle="cta-button-sidebar"
         aria-controls="cta-button-sidebar" type="button"
         class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
@@ -38,24 +39,28 @@
     <aside id="cta-button-sidebar"
         class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar">
-        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-800">
+
+            @php
+                $defaultHtmlClasses = [
+                    'flex',
+                    'items-center',
+                    'p-2',
+                    'text-gray-900',
+                    'rounded-lg',
+                    'dark:text-white',
+                    'hover:bg-gray-100',
+                    'dark:hover:bg-gray-700',
+                    'group',
+                ];
+            @endphp
+
             <ul class="space-y-2 font-medium">
                 <li>
-                    <a 
-                        href="#" 
-                        @class([
-                            'bg-gray-700' => request()->routeIs('user.dashboard'),
-                            'flex',
-                            'items-center',
-                            'p-2',
-                            'text-gray-900',
-                            'rounded-lg',
-                            'dark:text-white',
-                            'hover:bg-gray-100',
-                            'dark:hover:bg-gray-700',
-                            'group'
-                        ])
-                    >
+                    <a href="{{ route('dashboard') }}" @class([
+                        'bg-gray-700' => request()->routeIs('dashboard'),
+                        ...$defaultHtmlClasses,
+                    ])>
                         <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                             viewBox="0 0 22 21">
@@ -68,6 +73,67 @@
                     </a>
                 </li>
                 <li>
+                    <button type="button"
+                        class="flex items-center  w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                        aria-controls="dropdown-tasks" data-collapse-toggle="dropdown-tasks">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor"
+                            class="h-5 w-5 flex-shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+                        </svg>
+                        <span class="ms-3">
+                            Tasks
+                        </span>
+                        {{-- @dd(!request()->routeIs('user.tasks.*'), request()->route()) --}}
+                        <svg class="w-3 h-3 ml-auto" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 4 4 4-4" />
+                        </svg>
+                    </button>
+                    <ul 
+                        id="dropdown-tasks" 
+                        class="hidden py-2 space-y-2"
+                    >
+                        <li>
+                            <a href="{{ route('user.tasks') }}"
+                                class="flex gap-2 w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                                </svg>
+                                My tasks
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('user.tasks.add') }}"
+                                class="flex gap-2 w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>                                  
+                                Add Task
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {{-- <li>
+                    <a  href="{{ route('user.tasks') }}" 
+                        @class([
+                            'bg-gray-700' => request()->routeIs('user.tasks'),
+                            ...$defaultHtmlClasses,
+                        ])
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="h-5 w-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+                        </svg>
+                        <span class="ms-3">
+                            Tasks
+                        </span>
+                    </a>
+                </li> --}}
+                <li>
                     <a href="{{ route('logout') }}"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -78,7 +144,7 @@
                         <span class="flex-1 ms-3 whitespace-nowrap">Log Out</span>
                     </a>
                 </li>
-                
+
             </ul>
             <div id="dropdown-cta" class="p-4 mt-6 rounded-lg bg-blue-50 dark:bg-blue-900" role="alert">
                 <div class="flex items-center mb-3">
@@ -90,10 +156,10 @@
                         class="ms-auto -mx-1.5 -my-1.5 bg-blue-50 inline-flex justify-center items-center w-6 h-6 text-blue-900 rounded-lg focus:ring-2 focus:ring-blue-400 p-1 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-400 dark:hover:bg-blue-800"
                         data-dismiss-target="#dropdown-cta" aria-label="Close">
                         <span class="sr-only">Close</span>
-                        <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                            fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        <svg class="w-2.5 h-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                     </button>
                 </div>
@@ -107,8 +173,6 @@
     <!--- Main page content -->
     @yield('content')
 
-    @yield('scripts')
-
     <!--- Jquery --->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
@@ -120,6 +184,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
         integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    @yield('scripts')
 
     @if (session()->has('toastr'))
         <script>

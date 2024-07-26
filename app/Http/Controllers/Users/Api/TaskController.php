@@ -6,7 +6,6 @@ use App\Enums\StatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\ApiAuthentication;
 use App\Models\Task;
-use App\Models\User;
 use Illuminate\Contracts\Support\MessageBag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

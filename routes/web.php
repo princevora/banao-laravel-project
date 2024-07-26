@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Users\Api\TaskController;
 use App\Http\Controllers\Users\AuthController;
+use App\Http\Controllers\Users\Dashboard\DashboardController;
 use App\Http\Middleware\ApiAuthentication;
 use Illuminate\Support\Facades\Route;
 
@@ -21,8 +22,17 @@ Route::prefix('auth')->middleware('guest')->group(function () {
 
 // Routes For User Dashboard
 Route::prefix('u')->middleware('auth')->group(function () {
+    // View routes
     Route::view('dashboard', 'users.dashboard.index')->name('dashboard');
+
+    // Get routes.
     Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Tasks prefix
+    Route::prefix('tasks')->group(function () {
+        Route::get('view', [DashboardController::class, 'index'])->name('user.tasks');
+        Route::get('add', [DashboardController::class, 'addTask'])->name('user.tasks.add');
+    });
 });
 
 // Routes For ToDO API
