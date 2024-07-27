@@ -53,7 +53,13 @@
             $(btn).html(setLoader());
 
             // check if the task is empty
-            if(!$('#task-input').val()) return toastr.error("Task cannot be empty.");
+            if(!$('#task-input').val()) {
+                // Set the previous html
+                $(btn).html(defaultHtml);
+
+                // return error.
+                return toastr.error("Task cannot be empty.");
+            }
 
             // Url
             const url = '{{ route('todo.add') }}'
